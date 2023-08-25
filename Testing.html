@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<title>Test page</title>
+<html>
+
+<head>
+    <style>
+        h1 {
+            color: red;
+        }
+
+        p {
+            color: blue;
+        }
+    </style>
+    <script type="text/javascript">
+        var peopleArray = new Array;
+
+        function clearData() {
+            var oInputs = new Array();
+            oInputs = document.getElementsByTagName('input')
+            for (i = 0; i < oInputs.length; i++) {
+                // loop through and find <input type="text"/>
+                if (oInputs[i].type == 'text') {
+                    oInputs[i].value = "";
+                }
+            }
+            document.getElementById("married").options[0].selected = true;
+        }
+
+        function addData() {
+            var employmentStatus;
+            let radioButtons = document.getElementsByName('employment');
+            for (let radio of radioButtons) {
+                if (radio.checked) {
+                    employmentStatus = radio.value;
+                }
+            }
+            peopleArray.push(
+                {
+                    "first": document.getElementById("fname").value,
+                    "last": document.getElementById("lname").value,
+                    "employed": employmentStatus,
+                    "married": document.getElementById("married").options[document.getElementById("married").options.selectedIndex].text
+                });
+            addToTable();
+        }
+
+        function addToTable() {
+            var arrayData = peopleArray[peopleArray.length - 1];
+            var table = document.getElementById("userdata");
+            var row = table.insertRow(-1)
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            var cell4 = row.insertCell(3);
+            cell1.innerHTML = arrayData.first;
+            cell2.innerHTML = arrayData.last;
+            cell3.innerHTML = arrayData.employed;
+            cell4.innerHTML = arrayData.married;
+        }
+
+        function verifyData() {
+            var alertMsq = "";
+            if (!document.getElementById("fname").value.match(/\S/)) {
+                alertMsq += "You must enter a First Name.\n"
+            }
+            if (!document.getElementById("lname").value.match(/\S/)) {
+                alertMsq += "You must enter a Last Name.\n"
+            }
+            if (document.getElementById("married").selectedIndex === 0) {
+                alertMsq += "You must select a Marital Status."
+            }
+            if (alertMsq.length > 0) {
+                alert(alertMsq);
+            } else {
+                addData();
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <form>
+        <label for="fname">First name:&nbsp;</label>
+        <input type="text" id="fname" name="fname"><br>
+        <label for="lname">Last name:&nbsp;</label>
+        <input type="text" id="lname" name="lname"><br>
+        <input type="radio" id="employed" name="employment" value="Employed">
+        <label for="employed">Employed</label>
+        <input type="radio" id="unemployed" name="employment" value="UnEmployed" checked>
+        <label for="unemployed">UnEmployed</label><br>
+        <label for="married">Marital Status:</label>
+        <select name="married" id="married">
+            <option value="">--Please select Marital Status--</option>
+            <option value="Married">Married</option>
+            <option value="Single">Single</option>
+        </select><br>
+        <button type="button" onclick="verifyData()">Add</button><button type="button"
+            onclick="clearData()">Clear</button>
+    </form>
+    <table id="userdata" border="2">
+        <thead>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Employment Status</th>
+            <th>Marital Status</th>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</body>
+
+</html>
